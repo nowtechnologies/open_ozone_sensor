@@ -21,3 +21,6 @@ TC: 26.90␍␊
 RH: 35.10␍␊
 ```
 
+### Graphing sketch
+
+![](doc/grapher.png)
