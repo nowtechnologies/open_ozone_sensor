@@ -15,7 +15,7 @@ Datasheet Spec: noise = 2.5 uV RMS with Vref = 2.5 V
 #ifndef MCP335X_H
 #define MCP335X_H
 
-#define MCP335X_MAX_VALUE 4294967295
+#define MCP335X_MAX_VALUE 2097152
 
 #include <Arduino.h>
 #include <SPI.h>

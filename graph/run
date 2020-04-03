@@ -1,0 +1,4 @@
+#!/bin/bash
+# sudo service ModemManager stop
+echo "Trying to run: `pwd`"
+processing-java --force --sketch=`pwd` --output=`pwd`/output --run
