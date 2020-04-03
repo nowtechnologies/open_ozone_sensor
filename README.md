@@ -10,3 +10,14 @@
 ### Sensor wiring
 
 ![](doc/sensor_schema.png)
+
+### Serial output format
+
+* 115200 / 8N1
+
+```
+O3: 2079791␍␊
+TC: 26.90␍␊
+RH: 35.10␍␊
+```
+
