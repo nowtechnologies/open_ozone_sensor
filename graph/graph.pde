@@ -1,13 +1,14 @@
 import processing.serial.*;
 
-String newLine = null;
-Serial serialPort;
-int    x = 1;
-float  ozonePPM     = 0.0;
-float  temperature  = 0.0;
-float  humidity     = 0.0;
-
-float  lastO3Disp, lastTempDisp, lastHumiDisp;
+String  newLine = null;
+Serial  serialPort;
+int     x = 1;
+float   ozonePPM     = 0.0;
+float   temperature  = 0.0;
+float   humidity     = 0.0;
+float   lastO3Disp, lastTempDisp, lastHumiDisp;
+boolean logEnabled  = false;
+datalogger file;
 
 void drawGrid(){
   stroke(150);
@@ -19,6 +20,29 @@ void drawGrid(){
   }
 }
 
+void beginLog(){
+  file.beginSave();
+  file.add("TIME,O3PPM,TMP,RH%");
+  logEnabled = true;
+}
+
+void endLog(){
+  file.endSave( file.getIncrementalFilename( sketchPath("LOG" + java.io.File.separator + "log###.csv" )));
+}
+
+void keyPressed(){
+  if (key == 'l') {
+    logEnabled = !logEnabled;
+    println("Log: "+logEnabled);
+    if (logEnabled){
+      beginLog();
+    }
+    else {
+      endLog();
+    }
+  }
+}
+
 void setup() {
   size(800, 600);
   printArray(Serial.list());
@@ -27,6 +51,7 @@ void setup() {
   newLine = null;
   background(200);
   drawGrid();
+  file = new datalogger();
 }
 
 void readDataFromPort(){
@@ -65,8 +90,10 @@ void draw() {
   stroke(50,50,250); line(x-1,lastO3Disp,x,o);
   lastO3Disp = o;
 
-
   if (frameCount%10==0){
+    if (logEnabled){
+      file.add(hour()+":"+minute()+":"+second() +","+ ozonePPM +","+ temperature +","+ humidity);
+    }
     x++;
     if (x>=width) {
       x=1;
