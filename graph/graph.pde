@@ -3,7 +3,6 @@ import processing.serial.*;
 String newLine = null;
 Serial serialPort;
 int    x = 1;
-int    rawOzoneData = 0;
 float  ozonePPM     = 0.0;
 float  temperature  = 0.0;
 float  humidity     = 0.0;
@@ -11,7 +10,7 @@ float  humidity     = 0.0;
 float  lastO3Disp, lastTempDisp, lastHumiDisp;
 
 void drawGrid(){
-  stroke(50);
+  stroke(150);
   for (int dx=0; dx<=width; dx+=10){
     line(dx,0,dx,height);
   }
@@ -26,12 +25,8 @@ void setup() {
   serialPort = new Serial(this, Serial.list()[32], 115200);
   serialPort.clear();
   newLine = null;
-  background(42);
+  background(200);
   drawGrid();
-}
-
-float getOzonePPM(){
-  return map(rawOzoneData, 2097152, 0, 10, 1000); // ?
 }
 
 void readDataFromPort(){
@@ -40,7 +35,7 @@ void readDataFromPort(){
     if (newLine != null) {
       if (newLine.indexOf("O3")!=-1){
         String d = newLine.substring(4);
-        rawOzoneData = Integer.parseInt(d.trim());
+        ozonePPM = Float.parseFloat(d.trim());
       }
       if (newLine.indexOf("TC")!=-1){
         String d = newLine.substring(4);
@@ -66,7 +61,7 @@ void draw() {
   stroke(50,250,50); line(x-1,lastHumiDisp,x,h);
   lastHumiDisp = h;
 
-  float o = map(getOzonePPM(), 10, 1000, height, 0);
+  float o = map(ozonePPM, 0, 1000, height, 0);
   stroke(50,50,250); line(x-1,lastO3Disp,x,o);
   lastO3Disp = o;
 
@@ -75,7 +70,7 @@ void draw() {
     x++;
     if (x>=width) {
       x=1;
-      background(42);
+      background(200);
       drawGrid();
     }
   }

@@ -16,7 +16,7 @@
 #include <MCP335X.h>
 #include <AM2320.h>
 
-#define MQ131_VERBOSE
+// #define MQ131_VERBOSE
 
 // Default values
 
@@ -26,12 +26,12 @@
 #define MQ131_DEFAULT_LO_CONCENTRATION_RL         10000          // Default load resistance of 10 kOhms
 #define MQ131_DEFAULT_LO_CONCENTRATION_R0         110470.60      // Default R0 for low concentration MQ131
 #define MQ131_DEFAULT_LO_CONCENTRATION_TIME2READ  72             // Default time to read before stable signal for low concentration MQ131
-#define MQ131_DEFAULT_HI_CONCENTRATION_RL         220            // Default load resistance of 220 Ohms
+#define MQ131_DEFAULT_HI_CONCENTRATION_RL         10000          // Default load resistance of 10 kOhms
 #define MQ131_DEFAULT_HI_CONCENTRATION_R0         385.40         // Default R0 for high concentration MQ131
 #define MQ131_DEFAULT_HI_CONCENTRATION_TIME2READ  80             // Default time to read before stable signal for high concentration MQ131
 
 enum class MQ131Model {
-	LowConcentration, 
+	LowConcentration,
 	HighConcentration
 };
 
@@ -71,7 +71,7 @@ public:
 	// Initialize the driver, this will NOT call begin on MCP335X, neither on AM2320
 	void begin(int _pinHeater = -1, int _pinSensor = -1);
 	// Manage a full cycle with delay() if heater control is used
-	void read();								
+	void read();
 	// Read the concentration of gas
 	// The environment should be set for accurate results
 	float getO3(OzoneUnit unit = OzoneUnit::PPM);

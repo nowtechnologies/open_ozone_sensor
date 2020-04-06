@@ -21,7 +21,6 @@ public class graph extends PApplet {
 String newLine = null;
 Serial serialPort;
 int    x = 1;
-int    rawOzoneData = 0;
 float  ozonePPM     = 0.0f;
 float  temperature  = 0.0f;
 float  humidity     = 0.0f;
@@ -29,7 +28,7 @@ float  humidity     = 0.0f;
 float  lastO3Disp, lastTempDisp, lastHumiDisp;
 
 public void drawGrid(){
-  stroke(50);
+  stroke(150);
   for (int dx=0; dx<=width; dx+=10){
     line(dx,0,dx,height);
   }
@@ -44,12 +43,8 @@ public void setup() {
   serialPort = new Serial(this, Serial.list()[32], 115200);
   serialPort.clear();
   newLine = null;
-  background(42);
+  background(200);
   drawGrid();
-}
-
-public float getOzonePPM(){
-  return map(rawOzoneData, 2097152, 0, 10, 1000); // ?
 }
 
 public void readDataFromPort(){
@@ -58,7 +53,7 @@ public void readDataFromPort(){
     if (newLine != null) {
       if (newLine.indexOf("O3")!=-1){
         String d = newLine.substring(4);
-        rawOzoneData = Integer.parseInt(d.trim());
+        ozonePPM = Float.parseFloat(d.trim());
       }
       if (newLine.indexOf("TC")!=-1){
         String d = newLine.substring(4);
@@ -84,7 +79,7 @@ public void draw() {
   stroke(50,250,50); line(x-1,lastHumiDisp,x,h);
   lastHumiDisp = h;
 
-  float o = map(getOzonePPM(), 10, 1000, height, 0);
+  float o = map(ozonePPM, 0, 1000, height, 0);
   stroke(50,50,250); line(x-1,lastO3Disp,x,o);
   lastO3Disp = o;
 
@@ -93,7 +88,7 @@ public void draw() {
     x++;
     if (x>=width) {
       x=1;
-      background(42);
+      background(200);
       drawGrid();
     }
   }
