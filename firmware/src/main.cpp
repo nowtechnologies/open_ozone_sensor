@@ -2,18 +2,18 @@
 #include <MCP335X.h>
 #include <AM2320.h>
 #include <MQ131.h>
+#include <packets.h>
+#include <uartcomm.h>
 
 AM2320  thSensor(&Wire);
 MCP335X adc(10, 11, 12, 13);
 MQ131   mq131(MQ131Model::HighConcentration, &adc, &thSensor);
-boolean thSenseFound = false;
-boolean ozSenseFound = false;
 
 void setup(){
-  Serial.begin(115200);
+  Serial.begin(9600);
   adc.begin();
   thSensor.begin();
-  mq131.begin(); // this will NOT call adc.begin() and th.begin()!
+  mq131.begin();
   mq131.calibrate();
 }
 
@@ -21,7 +21,8 @@ void loop(){
   adc.read();
   thSensor.read();
 	mq131.read();
-  Serial.print("O3: "); Serial.println(mq131.getO3());
-  Serial.print("TC: "); Serial.println(thSensor.getTemperature());
-  Serial.print("RH: "); Serial.println(thSensor.getHumidity());
+  sensorPacket.ozonePPM     = mq131.getO3();
+  sensorPacket.temperature  = thSensor.getTemperature();
+  sensorPacket.humidity     = thSensor.getHumidity();
+  send(PID_SENSOR, &sensorPacket, sizeof(SENSORPACK));
 }
