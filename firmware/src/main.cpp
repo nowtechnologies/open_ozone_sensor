@@ -22,6 +22,7 @@ void loop(){
   thSensor.read();
 	mq131.read();
   sensorPacket.ozonePPM     = mq131.getO3();
+  sensorPacket.ratio        = mq131.getRatio();
   sensorPacket.temperature  = thSensor.getTemperature();
   sensorPacket.humidity     = thSensor.getHumidity();
   send(PID_SENSOR, &sensorPacket, sizeof(SENSORPACK));

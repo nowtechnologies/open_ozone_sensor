@@ -29,6 +29,7 @@ Serial  serialPort;
 float   ozonePPM     = 0.0f;
 float   temperature  = 0.0f;
 float   humidity     = 0.0f;
+float   ratio        = 0.0f;
 float   lastO3Disp, lastTempDisp, lastHumiDisp;
 boolean logEnabled  = false;
 
@@ -46,6 +47,7 @@ static final byte CRCIndex      = 4;
 static final byte ozoneIndex    = 0;
 static final byte tempIndex     = 4;
 static final byte humidIndex    = 8;
+static final byte ratioIndex    = 12;
 
 class UHR {
   public int firstLeadIn = 0;
@@ -181,17 +183,18 @@ public void printPacketContent(int[] data){
 }
 
 public void process(UHR header, RingBuffer buffer) throws Exception {
-
   int[] data = buffer.get(0, header.packetLength);
-
   if (header.packetID == PID_SENSOR) {
     printPacketContent(data);
     println("VALID SENSOR DATA");
     temperature = getFloat(data, tempIndex);
     humidity    = getFloat(data, humidIndex);
     ozonePPM    = getFloat(data, ozoneIndex);
+    ratio       = getFloat(data, ratioIndex);
+    if (logEnabled){
+      file.add(hour()+":"+minute()+":"+second() +","+ ozonePPM +","+ temperature +","+ humidity);
+    }
   }
-
 }
 
 public void drawGrid(){
@@ -242,6 +245,14 @@ int x = 1;
 
 public void draw() {
 
+  fill(42); stroke(42);
+  rect(0,0,140,100);
+  fill(255);
+  text("T="+temperature+" C", 10, 20);
+  text("H="+humidity+" %", 10, 40);
+  text("O="+ozonePPM+" ppm", 10, 60);
+  text("R="+ratio, 10, 80);
+
   float t = map(temperature, 0, 100, height, 0);
   stroke(250,50,50); line(x-1,lastTempDisp,x,t);
   lastTempDisp = t;
@@ -255,9 +266,6 @@ public void draw() {
   lastO3Disp = o;
 
   if (frameCount%10==0){
-    if (logEnabled){
-      file.add(hour()+":"+minute()+":"+second() +","+ ozonePPM +","+ temperature +","+ humidity);
-    }
     x++;
     if (x>=width) {
       x=1;

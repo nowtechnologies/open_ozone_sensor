@@ -43,7 +43,7 @@ MQ131::~MQ131() {
  * Init core variables
  */
 void MQ131::begin(int _pinHeater, int _pinSensor) {
-	
+
 	// Check pins
 	if (adc == NULL && _pinSensor == -1) {
 		Serial.println("ERROR: supplying sensor pin (analog input) is necessary if MCP335X is not used!");
@@ -54,7 +54,7 @@ void MQ131::begin(int _pinHeater, int _pinSensor) {
 	if (th == NULL) {
 		Serial.println("INFO: use setEnv(temp, humidity) before measurements to get accurate results!");
 	}
-	
+
 	// Store the circuit info (pin and load resistance)
 	pinHeater = _pinHeater;
 	pinSensor = _pinSensor;
@@ -131,7 +131,7 @@ bool MQ131::isTimeToRead() {
 	} else {
 		return true; // Assume that heater has been ON for long enough to read correct value
 	}
-} 
+}
 
 /**
  * Stop the heater
@@ -171,7 +171,7 @@ float MQ131::readRs() {
 		vRL = ((float)valueSensor) / 1024.0 * 5.0;
 	} else {
 		long valueSensor = adc->read(); // 22-bit ADC +/- 2097152 range
-		vRL = ((float)valueSensor) / 2097152.0 * 5.0; 
+		vRL = ((float)valueSensor) / 2097152.0 * 5.0;
 	}
 	// Compute the resistance of the sensor (for 5V Arduino)
 	float rS = (5.0 / vRL - 1.0) * valueRL;
@@ -226,7 +226,7 @@ float MQ131::getO3(OzoneUnit unit) {
 #endif
 		return 0.0;
 	}
-	float ratio = lastValueRs / valueR0 * getEnvCorrectRatio();
+	ratio = lastValueRs / valueR0 * getEnvCorrectRatio();
 #ifdef MQ131_VERBOSE
 		Serial.print("RS=");Serial.println(lastValueRs);
 		Serial.print("R0=");Serial.println(valueR0);
@@ -348,3 +348,9 @@ float MQ131::getR0() {
 	return valueR0;
 }
 
+/**
+ * Get ratio
+ */
+float MQ131::getRatio(){
+	return ratio;
+}

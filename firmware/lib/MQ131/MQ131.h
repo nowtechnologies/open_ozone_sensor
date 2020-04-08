@@ -62,6 +62,7 @@ private:
 	long secToRead = -1;
 	float valueR0 = -1; /// Calibration of R0
 	float lastValueRs = -1; /// Last value for sensor resistance
+	float ratio = -1;
 	// Parameters for environment
 	int temperatureCelsius = MQ131_DEFAULT_TEMPERATURE_CELSIUS; /// Environmental temperature in C
 	int humidityPercent = MQ131_DEFAULT_HUMIDITY_PERCENT; /// Environmental humidity in %
@@ -93,6 +94,7 @@ public:
 	// Setup calibration: RL Load resistance
 	void setRL(long _valueRL);
 	float getR0();
+	float getRatio();
 	// Launch full calibration cycle
 	// Ideally, 20°C 65% humidity in clean fresh air (can take some minutes)
 	// For further use of calibration values, please use getTimeToRead() and getR0()
