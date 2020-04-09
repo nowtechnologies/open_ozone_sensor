@@ -212,7 +212,7 @@ void keyPressed(){
 void setup() {
   size(800, 600);
   printArray(Serial.list());
-  serialPort = new Serial(this, Serial.list()[32], 9600);
+  serialPort = new Serial(this, Serial.list()[5], 9600);
   serialPort.clear();
   newLine = null;
   background(200);
