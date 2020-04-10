@@ -1,4 +1,4 @@
-# open_ozone_monitor
+# open_ozone_sensor
 *Air quality sensor for monitoring ozone levels*
 
 ### Components
