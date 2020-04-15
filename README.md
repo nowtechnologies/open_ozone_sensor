@@ -1,7 +1,7 @@
 # open_ozone_sensor
 *Air quality sensor for monitoring ozone levels*
 
-### Proof of concept
+## Proof of concept
 
 ![](doc/poc.jpg)
 
@@ -46,3 +46,16 @@ typedef struct {
 } __PACKED SENSORPACK; 	  // + 2 bytes of CRC16
 ```
 
+
+
+## Prototype
+
+Prototype sensor board should incorporate both low and high concentration versions of MQ131 ozone sensors and a precise temperature and humidity sensor. For communication there should be an easy to access BUS to allow multiple sensor nodes to connect to a network and a central controller. *( At this point MODBUS and CAN are both an option. )*
+
+### With external 22 bit ADC
+
+![](doc/sensor_a.png)
+
+### With internal 16 bit ADC
+
+![](doc/sensor_b.png)
